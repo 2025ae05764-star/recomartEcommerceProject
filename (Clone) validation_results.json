@@ -1,0 +1,796 @@
+{
+  "clickstream": {
+    "source": "user_interaction_logs",
+    "total_rows": 5000,
+    "total_cols": 12,
+    "columns": [
+      "event_id",
+      "user_id",
+      "item_id",
+      "event_type",
+      "session_id",
+      "timestamp",
+      "device",
+      "city",
+      "_ingested_at",
+      "_source_path",
+      "_source_type",
+      "_batch_id"
+    ],
+    "missing": [
+      {
+        "column": "event_id",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "user_id",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "item_id",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "event_type",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "session_id",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "timestamp",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "device",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "city",
+        "missing_count": 250,
+        "missing_pct": 5.0
+      },
+      {
+        "column": "_ingested_at",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "_source_path",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "_source_type",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "_batch_id",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      }
+    ],
+    "numeric_stats": [],
+    "cardinality": {
+      "user_id": 200,
+      "item_id": 500,
+      "event_type": 4,
+      "device": 3,
+      "city": 8
+    },
+    "domain_checks": [
+      {
+        "check": "event_type values",
+        "violations": 0,
+        "status": "PASS"
+      },
+      {
+        "check": "device values",
+        "violations": 0,
+        "status": "PASS"
+      },
+      {
+        "check": "user_id format",
+        "violations": 0,
+        "status": "PASS"
+      },
+      {
+        "check": "item_id format",
+        "violations": 0,
+        "status": "PASS"
+      },
+      {
+        "check": "event_id format",
+        "violations": 0,
+        "status": "PASS"
+      },
+      {
+        "check": "timestamp format",
+        "violations": 0,
+        "status": "PASS"
+      }
+    ],
+    "range_checks": [],
+    "duplicates": {
+      "duplicate_rows": 250,
+      "status": "WARN"
+    },
+    "key_dup": {
+      "duplicate_rows": 0,
+      "status": "PASS"
+    },
+    "dtypes": {
+      "event_id": "StringType()",
+      "user_id": "StringType()",
+      "item_id": "StringType()",
+      "event_type": "StringType()",
+      "session_id": "StringType()",
+      "timestamp": "StringType()",
+      "device": "StringType()",
+      "city": "StringType()",
+      "_ingested_at": "StringType()",
+      "_source_path": "StringType()",
+      "_source_type": "StringType()",
+      "_batch_id": "StringType()"
+    },
+    "event_distribution": {
+      "add_to_cart": 677,
+      "view": 2188,
+      "click": 1434,
+      "purchase": 701
+    },
+    "device_distribution": {
+      "desktop": 1662,
+      "tablet": 1620,
+      "mobile": 1718
+    }
+  },
+  "transactions": {
+    "source": "purchase_history",
+    "total_rows": 1500,
+    "total_cols": 14,
+    "columns": [
+      "order_id",
+      "user_id",
+      "item_id",
+      "quantity",
+      "unit_price",
+      "total_price",
+      "purchase_date",
+      "payment_method",
+      "gender",
+      "age_group",
+      "_ingested_at",
+      "_source_path",
+      "_source_type",
+      "_batch_id"
+    ],
+    "missing": [
+      {
+        "column": "order_id",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "user_id",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "item_id",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "quantity",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "unit_price",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "total_price",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "purchase_date",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "payment_method",
+        "missing_count": 61,
+        "missing_pct": 4.07
+      },
+      {
+        "column": "gender",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "age_group",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "_ingested_at",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "_source_path",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "_source_type",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "_batch_id",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      }
+    ],
+    "numeric_stats": [
+      {
+        "column": "quantity",
+        "min": 1.0,
+        "max": 5.0,
+        "mean": 2.994,
+        "median": 3.0,
+        "std": 1.3911
+      },
+      {
+        "column": "unit_price",
+        "min": 7.03,
+        "max": 4995.42,
+        "mean": 2543.6218,
+        "median": 2579.17,
+        "std": 1447.735
+      },
+      {
+        "column": "total_price",
+        "min": 7.03,
+        "max": 24933.5,
+        "mean": 7607.23,
+        "median": 6012.76,
+        "std": 5936.9673
+      }
+    ],
+    "cardinality": {
+      "user_id": 200,
+      "item_id": 478,
+      "payment_method": 5,
+      "gender": 3,
+      "age_group": 5
+    },
+    "domain_checks": [
+      {
+        "check": "payment_method values",
+        "violations": 0,
+        "status": "PASS"
+      },
+      {
+        "check": "gender values",
+        "violations": 0,
+        "status": "PASS"
+      },
+      {
+        "check": "age_group values",
+        "violations": 0,
+        "status": "PASS"
+      }
+    ],
+    "range_checks": [
+      {
+        "col": "quantity",
+        "expected": "[1, 100]",
+        "violations": 0,
+        "status": "PASS"
+      },
+      {
+        "col": "unit_price",
+        "expected": "[0.01, 100000]",
+        "violations": 0,
+        "status": "PASS"
+      },
+      {
+        "col": "total_price",
+        "expected": "[0.01, 500000]",
+        "violations": 0,
+        "status": "PASS"
+      }
+    ],
+    "duplicates": {
+      "duplicate_rows": 61,
+      "status": "WARN"
+    },
+    "key_dup": {
+      "duplicate_rows": 44,
+      "status": "WARN"
+    },
+    "dtypes": {
+      "order_id": "StringType()",
+      "user_id": "StringType()",
+      "item_id": "StringType()",
+      "quantity": "IntegerType()",
+      "unit_price": "DoubleType()",
+      "total_price": "DoubleType()",
+      "purchase_date": "StringType()",
+      "payment_method": "StringType()",
+      "gender": "StringType()",
+      "age_group": "StringType()",
+      "_ingested_at": "StringType()",
+      "_source_path": "StringType()",
+      "_source_type": "StringType()",
+      "_batch_id": "StringType()"
+    },
+    "payment_distribution": {
+      "COD": 294,
+      "credit_card": 296,
+      "UPI": 293,
+      "debit_card": 307,
+      "wallet": 249
+    },
+    "age_distribution": {
+      "35-44": 288,
+      "25-34": 309,
+      "55+": 308,
+      "18-24": 286,
+      "45-54": 309
+    }
+  },
+  "catalog": {
+    "source": "product_catalog",
+    "total_rows": 500,
+    "total_cols": 16,
+    "columns": [
+      "added_date",
+      "brand",
+      "category",
+      "is_active",
+      "item_id",
+      "name",
+      "price",
+      "rating",
+      "review_count",
+      "stock",
+      "sub_category",
+      "tags",
+      "_ingested_at",
+      "_source_path",
+      "_source_type",
+      "_batch_id"
+    ],
+    "missing": [
+      {
+        "column": "added_date",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "brand",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "category",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "is_active",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "item_id",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "name",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "price",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "rating",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "review_count",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "stock",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "sub_category",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "tags",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "_ingested_at",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "_source_path",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "_source_type",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "_batch_id",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      }
+    ],
+    "numeric_stats": [
+      {
+        "column": "price",
+        "min": 7.03,
+        "max": 4995.42,
+        "mean": 2509.2028,
+        "median": 2516.23,
+        "std": 1454.7268
+      },
+      {
+        "column": "stock",
+        "min": 0.0,
+        "max": 500.0,
+        "mean": 255.704,
+        "median": 254.0,
+        "std": 148.0738
+      },
+      {
+        "column": "rating",
+        "min": 1.0,
+        "max": 5.0,
+        "mean": 2.9794,
+        "median": 3.0,
+        "std": 1.1368
+      },
+      {
+        "column": "review_count",
+        "min": 0.0,
+        "max": 1994.0,
+        "mean": 1009.806,
+        "median": 980.0,
+        "std": 574.3543
+      }
+    ],
+    "cardinality": {
+      "category": 8,
+      "sub_category": 3,
+      "brand": 8
+    },
+    "domain_checks": [
+      {
+        "check": "category values",
+        "violations": 0,
+        "status": "PASS"
+      },
+      {
+        "check": "sub_category values",
+        "violations": 0,
+        "status": "PASS"
+      },
+      {
+        "check": "brand values",
+        "violations": 0,
+        "status": "PASS"
+      }
+    ],
+    "range_checks": [
+      {
+        "col": "price",
+        "expected": "[0.01, 100000]",
+        "violations": 0,
+        "status": "PASS"
+      },
+      {
+        "col": "stock",
+        "expected": "[0, 100000]",
+        "violations": 0,
+        "status": "PASS"
+      },
+      {
+        "col": "rating",
+        "expected": "[1.0, 5.0]",
+        "violations": 0,
+        "status": "PASS"
+      },
+      {
+        "col": "review_count",
+        "expected": "[0, 1000000]",
+        "violations": 0,
+        "status": "PASS"
+      }
+    ],
+    "duplicates": {
+      "duplicate_rows": 0,
+      "status": "PASS"
+    },
+    "key_dup": {
+      "duplicate_rows": 0,
+      "status": "PASS"
+    },
+    "dtypes": {
+      "added_date": "StringType()",
+      "brand": "StringType()",
+      "category": "StringType()",
+      "is_active": "BooleanType()",
+      "item_id": "StringType()",
+      "name": "StringType()",
+      "price": "DoubleType()",
+      "rating": "DoubleType()",
+      "review_count": "LongType()",
+      "stock": "LongType()",
+      "sub_category": "StringType()",
+      "tags": "ArrayType(StringType(), True)",
+      "_ingested_at": "StringType()",
+      "_source_path": "StringType()",
+      "_source_type": "StringType()",
+      "_batch_id": "StringType()"
+    },
+    "category_distribution": {
+      "Electronics": 53,
+      "Toys": 59,
+      "Clothing": 65,
+      "Books": 51,
+      "Grocery": 81,
+      "Sports": 78,
+      "Beauty": 55,
+      "Home & Kitchen": 58
+    },
+    "active_items": 475
+  },
+  "external": {
+    "source": "external_signals",
+    "total_rows": 500,
+    "total_cols": 11,
+    "columns": [
+      "avg_sentiment",
+      "fetched_at",
+      "item_id",
+      "popularity_score",
+      "return_rate",
+      "search_volume_7d",
+      "trend_score",
+      "_ingested_at",
+      "_source_path",
+      "_source_type",
+      "_batch_id"
+    ],
+    "missing": [
+      {
+        "column": "avg_sentiment",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "fetched_at",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "item_id",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "popularity_score",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "return_rate",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "search_volume_7d",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "trend_score",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "_ingested_at",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "_source_path",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "_source_type",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      {
+        "column": "_batch_id",
+        "missing_count": 0,
+        "missing_pct": 0.0
+      }
+    ],
+    "numeric_stats": [
+      {
+        "column": "popularity_score",
+        "min": 0.0011,
+        "max": 0.9992,
+        "mean": 0.4914,
+        "median": 0.48,
+        "std": 0.2915
+      },
+      {
+        "column": "avg_sentiment",
+        "min": -0.991,
+        "max": 0.9991,
+        "mean": -0.0083,
+        "median": -0.0256,
+        "std": 0.5819
+      },
+      {
+        "column": "trend_score",
+        "min": 0.04,
+        "max": 99.98,
+        "mean": 51.1336,
+        "median": 51.68,
+        "std": 28.8293
+      },
+      {
+        "column": "search_volume_7d",
+        "min": 30.0,
+        "max": 49983.0,
+        "mean": 26301.028,
+        "median": 26057.0,
+        "std": 14669.9244
+      },
+      {
+        "column": "return_rate",
+        "min": 0.0,
+        "max": 0.3,
+        "mean": 0.1415,
+        "median": 0.136,
+        "std": 0.0865
+      }
+    ],
+    "cardinality": {
+      "item_id": 500
+    },
+    "domain_checks": [],
+    "range_checks": [
+      {
+        "col": "popularity_score",
+        "expected": "[0.0, 1.0]",
+        "violations": 0,
+        "status": "PASS"
+      },
+      {
+        "col": "avg_sentiment",
+        "expected": "[-1.0, 1.0]",
+        "violations": 0,
+        "status": "PASS"
+      },
+      {
+        "col": "trend_score",
+        "expected": "[0.0, 100.0]",
+        "violations": 0,
+        "status": "PASS"
+      },
+      {
+        "col": "return_rate",
+        "expected": "[0.0, 1.0]",
+        "violations": 0,
+        "status": "PASS"
+      }
+    ],
+    "duplicates": {
+      "duplicate_rows": 0,
+      "status": "PASS"
+    },
+    "key_dup": {
+      "duplicate_rows": 0,
+      "status": "PASS"
+    },
+    "dtypes": {
+      "avg_sentiment": "DoubleType()",
+      "fetched_at": "StringType()",
+      "item_id": "StringType()",
+      "popularity_score": "DoubleType()",
+      "return_rate": "DoubleType()",
+      "search_volume_7d": "LongType()",
+      "trend_score": "DoubleType()",
+      "_ingested_at": "StringType()",
+      "_source_path": "StringType()",
+      "_source_type": "StringType()",
+      "_batch_id": "StringType()"
+    }
+  },
+  "cross_source": {
+    "clickstream_items_not_in_catalog": {
+      "count": 0,
+      "status": "PASS"
+    },
+    "transaction_items_not_in_catalog": {
+      "count": 0,
+      "status": "PASS"
+    },
+    "catalog_items_missing_ext_signals": {
+      "count": 0,
+      "status": "PASS"
+    },
+    "user_overlap_click_txn": 200
+  },
+  "scorecard": {
+    "clickstream": {
+      "checks_passed": 7,
+      "checks_failed": 0,
+      "checks_warned": 0,
+      "total_missing_values": 250,
+      "overall": "PASS"
+    },
+    "transactions": {
+      "checks_passed": 6,
+      "checks_failed": 0,
+      "checks_warned": 1,
+      "total_missing_values": 61,
+      "overall": "PASS"
+    },
+    "catalog": {
+      "checks_passed": 8,
+      "checks_failed": 0,
+      "checks_warned": 0,
+      "total_missing_values": 0,
+      "overall": "PASS"
+    },
+    "external": {
+      "checks_passed": 5,
+      "checks_failed": 0,
+      "checks_warned": 0,
+      "total_missing_values": 0,
+      "overall": "PASS"
+    }
+  },
+  "generated_at": "2026-04-26T13:46:50.362576"
+}
