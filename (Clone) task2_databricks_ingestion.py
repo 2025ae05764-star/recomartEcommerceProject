@@ -137,6 +137,13 @@ spark.sql("""
     COMMENT 'Execution logs for batch and streaming ingestion pipelines'
 """)
 
+# Create log file directory
+LOG_FILE_PATH = "/Volumes/workspace/recomart_source_data/raw/logs"
+try:
+    dbutils.fs.mkdirs(LOG_FILE_PATH)
+except:
+    pass  # Directory might already exist
+
 class IngestionLogger:
     """Logger for tracking ingestion pipeline execution"""
     
@@ -225,7 +232,7 @@ class IngestionLogger:
         self._write_log('FAILED', end_time, duration, error_message, error_type)
     
     def _write_log(self, status: str, end_time, duration, error_message, error_type):
-        """Write log entry to Delta table"""
+        """Write log entry to Delta table AND text file"""
         log_schema = StructType([
             StructField("log_id", StringType(), False),
             StructField("run_id", StringType(), False),
@@ -259,11 +266,45 @@ class IngestionLogger:
         )]
         
         log_df = spark.createDataFrame(log_data, log_schema)
+        
+        # 1. Write to Delta table
         log_df.write.format("delta").mode("append").saveAsTable("recomart_bronze.ingestion_logs")
+        
+        # 2. Write to text file
+        try:
+            # Create log file name with timestamp
+            timestamp = self.start_time.strftime("%Y%m%d_%H%M%S")
+            log_file = f"{LOG_FILE_PATH}/{self.job_type.lower()}_{timestamp}_{self.run_id}.log"
+            
+            # Format log entry as human-readable text
+            log_text = f"""{'='*80}
+INGESTION LOG ENTRY
+{'='*80}
+Run ID: {self.run_id}
+Job Run ID: {self.job_run_id or 'N/A (interactive)'}
+Notebook: {self.notebook_name}
+Job Type: {self.job_type}
+Status: {status}
+Start Time: {self.start_time.strftime('%Y-%m-%d %H:%M:%S')}
+End Time: {end_time.strftime('%Y-%m-%d %H:%M:%S') if end_time else 'N/A'}
+Duration: {duration} seconds" if duration else 'N/A'
+Records Processed: {self.records_processed if self.records_processed > 0 else 0}
+Tables Updated: {', '.join(self.tables_updated) if self.tables_updated else 'N/A'}
+Error Type: {error_type or 'N/A'}
+Error Message: {error_message or 'N/A'}
+{'='*80}
+"""
+            
+            # Write to file using dbutils
+            dbutils.fs.put(log_file, log_text, overwrite=True)
+            
+        except Exception as e:
+            # Don't fail the whole logging if text file write fails
+            print(f"  ⚠️  Warning: Could not write text log file: {e}")
 
 print("✓ Logging infrastructure initialized")
 print("  Log table: recomart_bronze.ingestion_logs")
-print("  Supports: job_run_id parameter or widget")
+print(f"  Log files: {LOG_FILE_PATH}")
 
 # COMMAND ----------
 
@@ -443,81 +484,44 @@ def ingest_json(source_key: str, base_path: str, file_prefix: str, data_field: s
 # COMMAND ----------
 
 # DBTITLE 1,Run Ingestion
-# ── Cell 5: Run Batch Ingestion (Purchase, Catalog, Signals ONLY) ────────────────────────
+# ── Cell 5: Run Batch Ingestion (Purchase, Catalog, Signals ONLY) ──────────────────────────
 
-from datetime import datetime
-TODAY = datetime.now()
+print("=" * 60)
+print("RecoMart BATCH Data Ingestion — Bronze Layer")
+print(f"Run time: {TODAY.strftime('%Y-%m-%d %H:%M:%S')}")
+print("\nNOTE: User interaction logs are handled by streaming ingestion")
+print("=" * 60)
 
-# Try to get job_run_id from notebook parameter (if running as part of job)
-try:
-    job_run_id = int(dbutils.widgets.get("job_run_id"))
-except:
-    job_run_id = None
+# Source 1: Purchase History (CSV) - find latest timestamped file
+df_transactions = ingest_csv(
+    "transactions",
+    VOLUME_BASE_PATH,
+    "purchase_history",
+    schema_transactions,
+    DELTA_TABLES["transactions"]
+)
 
-# Initialize logger
-logger = IngestionLogger(notebook_name="task2_databricks_ingestion", job_type="BATCH", job_run_id=job_run_id)
+# Source 2: Product Catalog (JSON API response) - find latest timestamped file
+df_catalog = ingest_json(
+    "catalog",
+    VOLUME_BASE_PATH,
+    "product_catalog",
+    data_field="data",
+    table_name=DELTA_TABLES["catalog"]
+)
 
-try:
-    print("=" * 60)
-    print("RecoMart BATCH Data Ingestion — Bronze Layer")
-    print(f"Run time: {TODAY.strftime('%Y-%m-%d %H:%M:%S')}")
-    print("\nNOTE: User interaction logs are handled by streaming ingestion")
-    print("=" * 60)
+# Source 3: External Signals (JSON API response) - find latest timestamped file
+df_external = ingest_json(
+    "external",
+    VOLUME_BASE_PATH,
+    "external_signals",
+    data_field="data",
+    table_name=DELTA_TABLES["external"]
+)
 
-    # Source 1: Purchase History (CSV) - find latest timestamped file
-    df_transactions = ingest_csv(
-        "transactions",
-        VOLUME_BASE_PATH,
-        "purchase_history",
-        schema_transactions,
-        DELTA_TABLES["transactions"]
-    )
-    records_trans = df_transactions.count()
-    logger.add_records(records_trans)
-    logger.add_table("purchase_history")
-    print(f"  ✓ Ingested {records_trans:,} purchase records")
-
-    # Source 2: Product Catalog (JSON API response) - find latest timestamped file
-    df_catalog = ingest_json(
-        "catalog",
-        VOLUME_BASE_PATH,
-        "product_catalog",
-        data_field="data",
-        table_name=DELTA_TABLES["catalog"]
-    )
-    records_catalog = df_catalog.count()
-    logger.add_records(records_catalog)
-    logger.add_table("product_catalog")
-    print(f"  ✓ Ingested {records_catalog:,} product records")
-
-    # Source 3: External Signals (JSON API response) - find latest timestamped file
-    df_external = ingest_json(
-        "external",
-        VOLUME_BASE_PATH,
-        "external_signals",
-        data_field="data",
-        table_name=DELTA_TABLES["external"]
-    )
-    records_external = df_external.count()
-    logger.add_records(records_external)
-    logger.add_table("external_signals")
-    print(f"  ✓ Ingested {records_external:,} external signal records")
-
-    print("\n" + "=" * 60)
-    print("✓ Batch ingestion complete (3 tables)")
-    print("=" * 60)
-    
-    # Log success
-    logger.log_success()
-    
-except Exception as e:
-    # Log failure with error details
-    logger.log_failure(e)
-    print(f"\n❌ ERROR: {str(e)}")
-    print("\nFull stack trace:")
-    import traceback
-    traceback.print_exc()
-    raise  # Re-raise to stop notebook execution
+print("\n" + "=" * 60)
+print("✓ Batch ingestion complete (3 tables)")
+print("=" * 60)
 
 # COMMAND ----------
 
@@ -589,38 +593,3 @@ print("=" * 60)
 # ── Cell 9: Verify Delta Tables ───────────────────────────────────────────────
 # Run this cell after ingestion to confirm tables are queryable
 display(spark.sql(f"SHOW TABLES IN {DELTA_DB}"))
-
-# COMMAND ----------
-
-# DBTITLE 1,View Ingestion Logs
-# ══════════════════════════════════════════════════════════════════════════════
-# View Ingestion Execution Logs
-# ══════════════════════════════════════════════════════════════════════════════
-
-print("\n" + "="*80)
-print("INGESTION EXECUTION LOGS")
-print("="*80)
-
-# Query logs from the logging table
-logs_df = spark.table("recomart_bronze.ingestion_logs").orderBy("start_time", ascending=False).limit(20)
-
-print(f"\nShowing last 20 ingestion runs:\n")
-display(logs_df.select(
-    "run_id",
-    "job_run_id",
-    "notebook_name",
-    "job_type",
-    "status",
-    "start_time",
-    "duration_seconds",
-    "records_processed",
-    "tables_updated",
-    "error_type"
-))
-
-print("\nLegend:")
-print("  run_id: Internal short UUID for this execution")
-print("  job_run_id: Databricks job run ID (NULL if interactive)")
-print("\nTo find logs for a specific job run:")
-print("  SELECT * FROM recomart_bronze.ingestion_logs WHERE job_run_id = <your_job_run_id>")
-print("="*80)
